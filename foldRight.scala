@@ -57,6 +57,10 @@ object List {
 	   case Cons(x, xs) => Cons(x,init(xs))
        }
 
+       def append[A](a: A, l: List[A]): List[A] = {
+       	   foldRight(l, a)(Cons(_,_))
+       }
+
        val x = List(1,2,3,4,5) match {
               case Cons(x, Cons(2, Cons(4,_))) => x // won't work, the 3rd one should be Cons(3,_)
        	      case Nil => 42
@@ -80,8 +84,6 @@ def foldRight[A,B](as: List[A], z: B)(f: (A,B) => B): B = {
 
 def product3(xs: List[Double]) =
     foldRight(xs, 1.0)(_ * _)
-
-
 
 /* Fold right 2 with a zeor element - which zeros multiplication */
 def foldRight2[A](as: List[A], z: A, zero: A)(f: (A,A) => A): A = {
@@ -124,9 +126,6 @@ def product4(xs: List[Double]) =
 
 def product5(xs: List[Double]) =
     foldRight3(xs, 1.0, 0.0)(_ * _)
-
-
-
 
 def foldRight4[A,B](as: List[A], z: B, zero: B)(f: (A,B) => B): B = {
     println(as)
@@ -211,7 +210,24 @@ def reverse[A](ns: List[A]) = {
     foldLeft3(ns,Nil:List[A])((b,a)=>Cons(a,b))
 }
 
-def reverse2[A](ns: List[A]) = {
-     foldRight10(ns,Nil:List[A])((a,b)=>())
+// def reverse2[A](ns: List[A]) = {
+//      foldRight10(ns,Nil:List[A])((a,b)=>())
+// }
+
+def foldRight11[A,B](as: List[A], z: B)(f: (A,B) => B): B = {
+    foldLeft3(as,z)(reverseArgs(f))
 }
+
+def reverseArgs[A,B](f: (A,B) => B): (B,A) => B = {
+    (b: B, a: A) => f(a,b)
+}
+
+def printRevers[A,B](a: A, b: B) {
+    println(a)
+    println(b)
+}
+
+// def listMe[A](a : A, b : A): List[A] = {
+//     List(a,b)
+// }
 
